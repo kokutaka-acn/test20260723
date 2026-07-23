@@ -2,7 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createApp } from './app.js';
 
-test('GET /api/users/ returns a list of users', async () => {
+const endpoints = [
+  '/api/users/',
+  '/api/teams/',
+  '/api/activities/',
+  '/api/leaderboard/',
+  '/api/workouts/',
+];
+
+test('API endpoints return seeded data payloads', async () => {
   const app = createApp();
   const server = app.listen(0);
 
@@ -16,10 +24,13 @@ test('GET /api/users/ returns a list of users', async () => {
   }
 
   try {
-    const response = await fetch(`http://127.0.0.1:${address.port}/api/users/`);
-    assert.equal(response.status, 200);
-    const body = await response.json();
-    assert.ok(Array.isArray(body));
+    for (const endpoint of endpoints) {
+      const response: Response = await fetch(`http://127.0.0.1:${address.port}${endpoint}`);
+      assert.equal(response.status, 200, `${endpoint} should respond with 200`);
+      const body = await response.json();
+      assert.ok(Array.isArray(body), `${endpoint} should return an array`);
+      assert.ok(body.length > 0, `${endpoint} should include seeded records`);
+    }
   } finally {
     await new Promise<void>((resolve, reject) => {
       server.close((error) => (error ? reject(error) : resolve()));

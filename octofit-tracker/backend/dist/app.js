@@ -1,52 +1,28 @@
 import express from 'express';
-import mongoose from 'mongoose';
-const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    role: String,
-});
-const teamSchema = new mongoose.Schema({
-    name: String,
-    members: [String],
-});
-const activitySchema = new mongoose.Schema({
-    type: String,
-    duration: Number,
-    date: String,
-});
-const leaderboardEntrySchema = new mongoose.Schema({
-    name: String,
-    points: Number,
-});
-const workoutSchema = new mongoose.Schema({
-    title: String,
-    focus: String,
-    duration: Number,
-});
-const User = mongoose.model('User', userSchema);
-const Team = mongoose.model('Team', teamSchema);
-const Activity = mongoose.model('Activity', activitySchema);
-const LeaderboardEntry = mongoose.model('LeaderboardEntry', leaderboardEntrySchema);
-const Workout = mongoose.model('Workout', workoutSchema);
+import { Activity, LeaderboardEntry, Team, User, Workout } from './models.js';
 const seedUsers = [
-    { name: 'Avery', email: 'avery@example.com', role: 'runner' },
-    { name: 'Jordan', email: 'jordan@example.com', role: 'coach' },
+    { name: 'Avery Chen', email: 'avery.chen@example.com', role: 'runner' },
+    { name: 'Jordan Blake', email: 'jordan.blake@example.com', role: 'coach' },
+    { name: 'Mina Patel', email: 'mina.patel@example.com', role: 'cyclist' },
 ];
 const seedTeams = [
-    { name: 'Velocity', members: ['Avery', 'Jordan'] },
-    { name: 'Momentum', members: ['Taylor', 'Casey'] },
+    { name: 'Velocity Squad', members: ['Avery Chen', 'Mina Patel'], sport: 'running' },
+    { name: 'Momentum Crew', members: ['Jordan Blake'], sport: 'cross-training' },
 ];
 const seedActivities = [
-    { type: 'run', duration: 30, date: '2026-07-23' },
-    { type: 'strength', duration: 45, date: '2026-07-22' },
+    { type: 'run', duration: 35, date: '2026-07-23', user: 'Avery Chen' },
+    { type: 'cycling', duration: 60, date: '2026-07-21', user: 'Mina Patel' },
+    { type: 'strength', duration: 45, date: '2026-07-20', user: 'Jordan Blake' },
 ];
 const seedLeaderboard = [
-    { name: 'Avery', points: 1800 },
-    { name: 'Jordan', points: 1500 },
+    { name: 'Avery Chen', points: 1820, streak: 7 },
+    { name: 'Mina Patel', points: 1680, streak: 5 },
+    { name: 'Jordan Blake', points: 1530, streak: 3 },
 ];
 const seedWorkouts = [
-    { title: 'Speed Intervals', focus: 'cardio', duration: 25 },
-    { title: 'Core Strength', focus: 'mobility', duration: 20 },
+    { title: 'Tempo Run', focus: 'cardio', duration: 25, difficulty: 'hard' },
+    { title: 'Core Flow', focus: 'mobility', duration: 20, difficulty: 'easy' },
+    { title: 'Strength Circuit', focus: 'strength', duration: 40, difficulty: 'moderate' },
 ];
 function getApiBaseUrl(req) {
     const codespaceName = process.env.CODESPACE_NAME;
