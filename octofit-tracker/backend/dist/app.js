@@ -24,12 +24,12 @@ const seedWorkouts = [
     { title: 'Core Flow', focus: 'mobility', duration: 20, difficulty: 'easy' },
     { title: 'Strength Circuit', focus: 'strength', duration: 40, difficulty: 'moderate' },
 ];
-function getApiBaseUrl(req) {
+function getApiBaseUrl() {
     const codespaceName = process.env.CODESPACE_NAME;
     if (codespaceName) {
         return `https://${codespaceName}-8000.app.github.dev`;
     }
-    return `http://${req?.headers.host || 'localhost:8000'}`;
+    return 'http://localhost:8000';
 }
 async function getOrSeed(model, seed) {
     try {
@@ -54,27 +54,27 @@ export function createApp() {
     });
     app.get('/api/users/', async (_req, res) => {
         const users = await getOrSeed(User, seedUsers);
-        res.set('X-API-Base-Url', getApiBaseUrl(_req));
+        res.set('X-API-Base-Url', getApiBaseUrl());
         res.json(users);
     });
     app.get('/api/teams/', async (_req, res) => {
         const teams = await getOrSeed(Team, seedTeams);
-        res.set('X-API-Base-Url', getApiBaseUrl(_req));
+        res.set('X-API-Base-Url', getApiBaseUrl());
         res.json(teams);
     });
     app.get('/api/activities/', async (_req, res) => {
         const activities = await getOrSeed(Activity, seedActivities);
-        res.set('X-API-Base-Url', getApiBaseUrl(_req));
+        res.set('X-API-Base-Url', getApiBaseUrl());
         res.json(activities);
     });
     app.get('/api/leaderboard/', async (_req, res) => {
         const leaderboard = await getOrSeed(LeaderboardEntry, seedLeaderboard);
-        res.set('X-API-Base-Url', getApiBaseUrl(_req));
+        res.set('X-API-Base-Url', getApiBaseUrl());
         res.json(leaderboard.sort((a, b) => b.points - a.points));
     });
     app.get('/api/workouts/', async (_req, res) => {
         const workouts = await getOrSeed(Workout, seedWorkouts);
-        res.set('X-API-Base-Url', getApiBaseUrl(_req));
+        res.set('X-API-Base-Url', getApiBaseUrl());
         res.json(workouts);
     });
     return app;
