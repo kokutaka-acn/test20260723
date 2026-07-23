@@ -1,14 +1,5 @@
 import { useEffect, useState } from 'react';
 
-function buildApiUrl(path) {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME;
-  if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev${path}`;
-  }
-
-  return `http://localhost:8000${path}`;
-}
-
 export default function Teams() {
   const [teams, setTeams] = useState([]);
   const [error, setError] = useState('');
@@ -16,7 +7,10 @@ export default function Teams() {
   useEffect(() => {
     async function loadTeams() {
       try {
-        const response = await fetch(buildApiUrl('/api/teams/'));
+        const response = await fetch(
+          `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+        );
+
         if (!response.ok) {
           throw new Error('Unable to load teams');
         }
